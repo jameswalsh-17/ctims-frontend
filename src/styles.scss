@@ -1,1 +1,294 @@
-/* You can add global styles to this file, and also import other style files */
+/* --- GLOBAL DARK MODE STYLES --- */
+
+/* 1. High-level container backgrounds */
+body.dark-theme,
+body.dark-theme html,
+body.dark-theme app-root,
+body.dark-theme main,
+body.dark-theme .main-content,
+body.dark-theme .page-container {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme {
+  /* 2. Standard Text Elements */
+  h1, h2, h3, h4, h5, h6, p, label, li, strong, em, small {
+    color: #e0e0e0 !important;
+  }
+
+  /* 3. Cards and Tables containers */
+  .settings-card, .table-wrapper, .form-card {
+    background-color: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3) !important;
+  }
+
+  /* ----------------------------------------------------
+     CRITICAL FIXES FOR VIEW PAGES & SETTINGS BOXES
+  ------------------------------------------------------- */
+  /* Aggressively catch ANY variation of white or light-grey backgrounds */
+  [style*="background: white"], 
+  [style*="background-color: white"],
+  [style*="background: #fff"],
+  [style*="background-color: #fff"],
+  [style*="background: #ffffff"],
+  [style*="background-color: #ffffff"],
+  [style*="background: #f8f9fa"],
+  [style*="background-color: #f8f9fa"],
+  [style*="background: #f9f9f9"],
+  [style*="background-color: #f9f9f9"] {
+    background: #1e1e1e !important;
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0 !important;
+  }
+  
+  /* Force all children inside those boxes to be light text */
+  [style*="background: white"] *, 
+  [style*="background-color: white"] *,
+  [style*="background: #fff"] *,
+  [style*="background-color: #fff"] *,
+  [style*="background: #ffffff"] *,
+  [style*="background-color: #ffffff"] *,
+  [style*="background: #f8f9fa"] *,
+  [style*="background-color: #f8f9fa"] *,
+  [style*="background: #f9f9f9"] *,
+  [style*="background-color: #f9f9f9"] * {
+      color: #e0e0e0 !important;
+  }
+  
+  /* Make sure labels stay slightly muted but readable */
+  [style*="background:"] small, 
+  [style*="background-color:"] small { 
+      color: #aaa !important; 
+  }
+  /* ---------------------------------------------------- */
+  /* ---------------------------------------------------- */
+
+
+  /* 4. Inputs, Selects, Textareas */
+  input, select, textarea {
+    background-color: #2c2c2c !important;
+    color: white !important;
+    border: 1px solid #444 !important;
+    &::placeholder { color: #888 !important; }
+  }
+
+  /* 5. Tables */
+  th { 
+    background-color: #2c2c2c !important; 
+    color: white !important; 
+    border-bottom: 2px solid #444 !important;
+  }
+  td { border-bottom-color: #333 !important; }
+  tr:hover { background-color: #2a2a2a !important; }
+  .no-data { color: #aaa !important; }
+
+  /* 6. Buttons */
+  /* The missing Cancel button fix! */
+  .btn-cancel {
+    color: #e0e0e0 !important;
+    border-color: #555 !important;
+    &:hover {
+      background-color: #333 !important;
+      color: #fff !important;
+    }
+  }
+  
+  /* View buttons in tables */
+  .action-btn.view {
+    background-color: #333 !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
+     &:hover { background-color: #444 !important; }
+  }
+
+  /* 7. Badges - keep text readable against pastel backgrounds */
+  .status-badge, .action-badge {
+    color: #121212 !important; 
+    font-weight: bold;
+  }
+
+  input[type="text"], 
+  input[type="email"], 
+  input[type="password"], 
+  input[type="date"],
+  select, 
+  textarea,
+  .form-control,
+  .form-select {
+    background-color: #2c2c2c !important; /* Distinct dark grey for inputs */
+    color: #ffffff !important;           /* Bright white text */
+    border: 1px solid #555 !important;
+  }
+
+  /* Make sure placeholders are legible but distinct */
+  input::placeholder, select::placeholder, textarea::placeholder {
+      color: #aaa !important;
+  }
+
+  /* Ensure dropdown options and arrows are readable */
+  select {
+      color: #fff !important;
+  }
+  select option {
+      background-color: #2c2c2c;
+      color: #fff;
+  }
+
+  /* 2. Overpower the specific stubborn white background in Account Settings (Main Farm Details) */
+  .detail-card,
+  [style*="background: white"], 
+  [style*="background-color: white"],
+  [style*="background: #fff"],
+  [style*="background-color: #fff"] {
+    background: #1e1e1e !important;
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0 !important;
+
+    /* Force all child text to be readable */
+    * {
+      color: #e0e0e0 !important;
+    }
+    
+    /* Keep muted text slightly dimmer */
+    .text-muted, small, i, em { 
+        color: #aaa !important; 
+    }
+  }
+
+  /* 3. The Ultimate View Cattle Box Fix */
+  /* Target the 6 grid boxes specifically, overpowering their inline #f8f9fa background */
+  .detail-item,
+  .info-box,
+  [style*="background: #f8f9fa"],
+  [style*="background-color: #f8f9fa"] {
+      background-color: #2c2c2c !important; /* Nice dark box */
+      border: 1px solid #444 !important;
+      
+      label {
+          color: #aaa !important; /* Muted label */
+      }
+      p, span, strong {
+          color: #ffffff !important; /* Bright data text */
+      }
+  }
+
+  /* Force the text in Account Settings to be visible against the dark card */
+  .form-card {
+    background-color: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    
+    h1, h2, h3, h4, h5, label, p {
+        color: #e0e0e0 !important;
+    }
+  }
+
+  .metric-card,
+  .recent-card,
+  .search-section,
+  .cow-profile-container,
+  .list-item,
+  .filter-bar,
+  .dashboard-widgets .widget-box {
+    background: #1e1e1e !important;
+    background-color: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .filter-bar {
+    .filter-group label { color: #e0e0e0 !important; }
+    input, select {
+      background-color: #2c2c2c !important;
+      border-color: #444 !important;
+      color: #fff !important;
+    }
+    .btn-clear {
+      background-color: #333 !important;
+      color: #e0e0e0 !important;
+      border-color: #444 !important;
+      &:hover { background-color: #444 !important; }
+    }
+  }
+
+  .status-badge {
+    color: #121212 !important;
+  }
+
+  /* Specific Dashboard Overrides */
+  .search-section label { color: #e0e0e0 !important; }
+  .search-select {
+    background-color: #2c2c2c !important;
+    color: #fff !important;
+    border-color: #444 !important;
+  }
+  .btn-clear {
+    background-color: #333 !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+  }
+  .cow-profile-container .profile-header {
+    background-color: #2c2c2c !important;
+    border-bottom: 1px solid #333 !important;
+  }
+  .cow-profile-container .profile-card .record-item {
+    background-color: #252525 !important;
+    border-color: #444 !important;
+  }
+  .cow-profile-container .profile-card .record-item:nth-child(even) {
+    background-color: #1e1e1e !important;
+  }
+
+  /* Make headings inside cards visible */
+  .metric-card h3,
+  .recent-card h3,
+  .widget-box h3,
+  .metric-card .big-number {
+    color: #ffffff !important;
+  }
+
+  /* --- Recent Activity Lists --- */
+  .list-item {
+    border-bottom: 1px solid #333 !important;
+  }
+
+  .list-item .item-details strong,
+  .list-item .item-details span {
+    color: #e0e0e0 !important;
+  }
+
+  .list-item .item-details small {
+    color: #aaa !important;
+  }
+
+  /* Icons inside the recent lists */
+  .icon-circle {
+      background-color: #2c2c2c !important;
+      border: 1px solid #444 !important;
+  }
+
+  /* "View" links inside the cards */
+  .view-link {
+    color: #66b2ff !important; /* Lighter blue for better visibility on dark */
+  }
+
+  /* The Next Inspection Banner */
+  .inspection-banner {
+    background-color: #332b00 !important; /* Dark yellowish/brown */
+    border: 1px solid #4d4000 !important;
+    color: #ffd700 !important; /* Gold text */
+  }
+
+  .inspection-banner .sub-text {
+    color: #cca300 !important; /* Slightly darker gold */
+  }
+
+  /* The yellow View Location button */
+  .btn-action {
+      background-color: #cca300 !important;
+      color: #000 !important;
+  }
+}

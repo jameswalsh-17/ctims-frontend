@@ -1,0 +1,100 @@
+<div class="page-container">
+  <div class="form-card">
+    <h2>Add New Health Record</h2>
+    <p>Log a vet visit, treatment, or checkup for an animal.</p>
+
+    <div *ngIf="errorMessage" class="alert error" style="background: #f8d7da; color: #842029; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; border: 1px solid #f5c2c7;">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="healthForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-group">
+        <label for="cow_id">Animal (Cow Tag) *</label>
+        <select id="cow_id" formControlName="cow_id">
+          <option value="" disabled>Select an animal</option>
+          <option *ngFor="let cow of cows" [value]="cow.cow_id">
+            {{ cow.tag_number }} ({{ cow.breed }})
+          </option>
+        </select>
+      </div>
+
+      <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+          <label for="vet">Veterinary Surgeon *</label>
+          <select id="vet" formControlName="vet">
+            <option value="" disabled>Select Surgeon</option>
+            <option *ngFor="let vet of surgeons" [value]="vet.username">
+              Dr. {{ vet.username }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+          <label for="vet_assistant">Assistant</label>
+          <select id="vet_assistant" formControlName="vet_assistant">
+            <option value="">None</option>
+            <option *ngFor="let assistant of assistants" [value]="assistant.username">
+              {{ assistant.username }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+          <label for="last_visit">Date of Visit *</label>
+          <input type="date" id="last_visit" formControlName="last_visit">
+        </div>
+
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+          <label for="follow_up_date">Follow-up Date</label>
+          <input type="date" id="follow_up_date" formControlName="follow_up_date">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reason">Reason for Visit *</label>
+        <input type="text" id="reason" formControlName="reason" placeholder="e.g. Annual Checkup, Lame cow">
+      </div>
+
+      <div class="form-row" style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+          <label for="vaccination_type">Vaccination Type (If applicable)</label>
+          <select id="vaccination_type" formControlName="vaccination_type">
+            <option value="">-- No Vaccination --</option>
+            <option *ngFor="let type of vaccinationTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="flex: 1; margin-bottom: 0;">
+          <label for="weight">Weight (kg)</label>
+          <input type="number" id="weight" formControlName="weight" placeholder="Animal weight">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="diagnosis">Diagnosis</label>
+        <input type="text" id="diagnosis" formControlName="diagnosis" placeholder="Final medical findings">
+      </div>
+
+      <div class="form-group">
+        <label for="treatment">Treatment Administered *</label>
+        <input type="text" id="treatment" formControlName="treatment" placeholder="e.g. Antibiotics, Hoof trimming">
+      </div>
+
+      <div class="form-group">
+        <label for="notes">Clinical Notes</label>
+        <textarea id="notes" formControlName="notes" rows="3" placeholder="Additional details..."></textarea>
+      </div>
+
+      <div class="button-group" style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="button" class="btn-cancel" routerLink="/health-records" style="flex: 1; padding: 0.75rem; border-radius: 4px; border: 1px solid #ced4da; background: white; cursor: pointer;">Cancel</button>
+        <button type="submit" [disabled]="healthForm.invalid || isSubmitting" class="btn-submit" style="flex: 2; padding: 0.75rem; border-radius: 4px; border: none; background: #0d6efd; color: white; font-weight: bold; cursor: pointer;">
+          {{ isSubmitting ? 'Saving...' : 'Save Health Record' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

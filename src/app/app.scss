@@ -1,0 +1,17 @@
+/* Keep the background slightly gray so your white form cards pop! */
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f4f7f6; 
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1; /* Takes up all remaining space to the right of the sidebar */
+  padding: 2rem;
+  overflow-y: auto; /* Allows the content to scroll while the sidebar stays fixed */
+}

@@ -1,0 +1,46 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2 style="color: #228be6; margin-bottom: 0.5rem;">🚜 CTIMS Login</h2>
+    <p style="color: #6c757d; margin-bottom: 2rem;">Please log in to manage your herd.</p>
+
+    <div *ngIf="successMessage" class="alert success" style="background: #d1e7dd; color: #0f5132; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid #badbcc;">
+      {{ successMessage }}
+    </div>
+
+    <div *ngIf="errorMessage" class="error-alert" style="background: #f8d7da; color: #842029; padding: 0.75rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.9rem; border: 1px solid #f5c2c7;">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="username" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #495057;">Username</label>
+        <input 
+          type="text" 
+          id="username" 
+          formControlName="username" 
+          placeholder="Enter your username"
+          style="width: 100%; padding: 0.75rem; border: 1px solid #dee2e6; border-radius: 8px; font-size: 1rem;"
+        >
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label for="password" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #495057;">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password" 
+          placeholder="Enter your password"
+          style="width: 100%; padding: 0.75rem; border: 1px solid #dee2e6; border-radius: 8px; font-size: 1rem;"
+        >
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid || isLoading" style="width: 100%; padding: 0.85rem; background-color: #228be6; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+        {{ isLoading ? 'Logging in...' : 'Log In' }}
+      </button>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: #6c757d;">
+        New to the farm? <a routerLink="/register" style="color: #228be6; text-decoration: none; font-weight: 600;">Request Access</a>
+      </div>
+    </form>
+  </div>
+</div>

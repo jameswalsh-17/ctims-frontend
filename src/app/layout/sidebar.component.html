@@ -1,0 +1,58 @@
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h2>🚜 CTIMS</h2>
+    <p>Farm Management</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active">
+          <span class="icon">📊</span> Dashboard
+        </a>
+      </li>
+      <li>
+        <a routerLink="/my-cattle" routerLinkActive="active">
+          <span class="icon">🐄</span> My Cattle
+        </a>
+      </li>
+      <li>
+        <a routerLink="/health-records" routerLinkActive="active">
+          <span class="icon">🏥</span> Health Records
+        </a>
+      </li>
+      <li>
+        <a routerLink="/breeding-records" routerLinkActive="active">
+          <span class="icon">🧬</span> Breeding
+        </a>
+      </li>
+      <li>
+        <a routerLink="/locations" routerLinkActive="active">
+          <span class="icon">📍</span> Farm Locations
+        </a>
+      </li>
+      <li *ngIf="canViewUsers">
+        <a routerLink="/users" routerLinkActive="active">
+          <span class="icon">👥</span> User Management
+        </a>
+      </li>
+
+      <li *ngIf="canViewAudit">
+        <a routerLink="/audit" routerLinkActive="active">
+          <span class="icon">📋</span> System Audit Log
+        </a>
+      </li>
+      <li>
+        <a routerLink="/settings" routerLinkActive="active">
+          <span class="icon">⚙️</span> Settings
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="btn-logout" (click)="onLogout($event)">
+        <span class="icon">🚪</span> Logout
+      </button>
+  </div>
+</aside>

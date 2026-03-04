@@ -1,0 +1,58 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2>System Audit Log</h2>
+      <p style="margin: 0.25rem 0 0; color: #6c757d; font-size: 0.95rem;">Track all changes and actions across the database.</p>
+    </div>
+    
+    <div>
+      <label for="limit" style="font-weight: 500; margin-right: 0.5rem;">Show recent:</label>
+      <select id="limit" (change)="onLimitChange($event)" style="padding: 0.4rem; border-radius: 4px; border: 1px solid #ccc;">
+        <option value="25">25 records</option>
+        <option value="50" selected>50 records</option>
+        <option value="100">100 records</option>
+        <option value="200">200 records</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Loading audit logs...</div>
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div class="table-wrapper" *ngIf="!isLoading && !errorMessage">
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>User ID</th>
+          <th>Action</th>
+          <th>Entity</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of logs">
+          <td style="white-space: nowrap;">{{ log.created_at | date:'medium' }}</td>
+          <td><strong>{{ log.user_id || 'System' }}</strong></td>
+          <td>
+            <span class="action-badge" 
+                  [ngClass]="{
+                    'create': log.action === 'CREATE',
+                    'update': log.action === 'UPDATE',
+                    'delete': log.action === 'DELETE',
+                    'auth': log.action === 'LOGIN' || log.action === 'LOGOUT'
+                  }">
+              {{ log.action }}
+            </span>
+          </td>
+          <td style="font-weight: 500; color: #495057;">{{ log.entity }}</td>
+          <td style="color: #666; font-size: 0.95rem;">{{ log.details }}</td>
+        </tr>
+        
+        <tr *ngIf="logs.length === 0">
+          <td colspan="5" class="no-data">No audit logs found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

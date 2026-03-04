@@ -1,0 +1,80 @@
+<div class="page-container">
+  
+  <div class="header-actions">
+    <button class="btn-back" (click)="goBack()">← Back to Records</button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Loading record details...</div>
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div class="profile-card" *ngIf="!isLoading && record">
+    
+    <div class="profile-header">
+      <div class="tag-title">
+        <h2>Cow Tag: {{ record.tag_number }}</h2>
+        <span class="status-badge active">Visit Logged</span>
+      </div>
+      <button *ngIf="canEdit" class="btn-edit" [routerLink]="['/edit-health-record', record.health_id]">Edit Record</button>
+    </div>
+
+    <div class="profile-body">
+      
+      <div class="section-title">Visit Information</div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <label>Date of Visit</label>
+          <p>{{ record.last_visit | date:'longDate' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Follow-up Date</label>
+          <p>{{ record.follow_up_date ? (record.follow_up_date | date:'longDate') : 'None scheduled' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Veterinary Surgeon</label>
+          <p>Dr. {{ record.vet_username }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Vet Assistant</label>
+          <p>{{ record.vet_assistant_username || 'None' }}</p>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top: 2.5rem;">Medical Details</div>
+      <div class="details-grid">
+        <div class="detail-item">
+          <label>Reason for Visit</label>
+          <p>{{ record.reason }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Vaccination Type</label>
+          <p>{{ record.vaccination_type || 'None administered' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Diagnosis</label>
+          <p>{{ record.diagnosis || 'None provided' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Treatment Administered</label>
+          <p>{{ record.treatment }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Weight at Visit</label>
+          <p>{{ record.weight ? record.weight + ' kg' : 'Not recorded' }}</p>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top: 2.5rem;">Additional Clinical Notes</div>
+      <div class="notes-box">
+        <p>{{ record.notes || 'No additional notes provided for this record.' }}</p>
+      </div>
+
+    </div>
+  </div>
+</div>

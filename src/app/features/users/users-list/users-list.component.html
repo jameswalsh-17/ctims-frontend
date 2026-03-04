@@ -1,0 +1,75 @@
+<div class="page-container">
+  
+  <div class="page-header">
+    <h2>User Management</h2>
+    <button class="add-btn" routerLink="/add-user">+ Add New User</button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Syncing user database...</div>
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div *ngIf="!isLoading && !errorMessage">
+    
+    <div class="section-container" *ngIf="pendingUsers.length > 0" style="margin-bottom: 3rem;">
+      <h3 style="color: #f08c00; margin-bottom: 1rem;">⏳ Pending Access Requests</h3>
+      <div class="table-wrapper">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Requested Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of pendingUsers" style="background-color: #fff9db;">
+              <td><strong>{{ user.username }}</strong></td>
+              <td>{{ user.email }}</td>
+              <td><span class="role-badge">{{ user.role }}</span></td>
+              <td>
+                <button class="action-btn view" (click)="approveUser(user.user_id, user.username)" style="background: #40c057; color: white;">Approve</button>
+                <button class="action-btn delete" (click)="rejectUser(user.user_id, user.username)">Reject</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-container">
+      <h3 style="margin-bottom: 1rem;">👥 Active System Users</h3>
+      <div class="table-wrapper">
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td><strong>{{ user.username }}</strong></td>
+              <td>{{ user.email }}</td>
+              <td>
+                <span class="role-badge" [ngClass]="user.role.toLowerCase().replace(' ', '-')">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td>
+                <button class="action-btn edit" [routerLink]="['/edit-user', user.user_id]">Edit</button>
+                <button class="action-btn delete" (click)="deleteUser(user.user_id, user.username)">Delete</button>
+              </td>
+            </tr>
+            <tr *ngIf="users.length === 0">
+              <td colspan="4" class="no-data">No active users found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

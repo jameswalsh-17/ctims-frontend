@@ -1,0 +1,31 @@
+.page-container { padding: 2rem; font-family: sans-serif; }
+.page-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;
+  h2 { margin: 0; }
+  .add-btn {
+    background-color: #0056b3; color: white; border: none; padding: 0.5rem 1rem;
+    border-radius: 4px; cursor: pointer; font-weight: bold;
+    &:hover { background-color: #004494; }
+  }
+}
+.alert {
+  padding: 1rem; border-radius: 4px; margin-bottom: 1rem;
+  &.info { background-color: #e3f2fd; color: #0d47a1; }
+  &.error { background-color: #ffebee; color: #c62828; }
+}
+.table-wrapper {
+  background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden;
+}
+.location-table {
+  width: 100%; border-collapse: collapse;
+  th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+  th { background-color: #f8f9fa; font-weight: bold; color: #333; }
+  tr:hover { background-color: #f1f1f1; }
+  .status-badge { background-color: #e0e0e0; padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.85rem; }
+  .no-data { text-align: center; color: #666; padding: 2rem; }
+  .action-btn {
+    border: none; padding: 0.25rem 0.5rem; margin-right: 0.5rem; border-radius: 4px; cursor: pointer;
+    &.edit { background-color: #ffc107; color: black; }
+    &.delete { background-color: #dc3545; color: white; }
+  }
+}

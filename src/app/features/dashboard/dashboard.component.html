@@ -1,0 +1,201 @@
+<div class="page-container">
+  
+  <div class="page-header" style="margin-bottom: 2rem;">
+    <h2>Farm Dashboard</h2>
+    <p style="color: #6c757d;">Your live herd statistics and recent activity.</p>
+  </div>
+
+  <div class="search-section">
+    <div class="search-container">
+      <label for="cow-search">Search Cow by Tag Number:</label>
+      <div class="search-input-group">
+        <select id="cow-search" [(ngModel)]="selectedCowId" (change)="onCowSelected()" class="search-select">
+          <option value="">-- Select Tag Number --</option>
+          <option *ngFor="let cow of allCows" [value]="cow.cow_id || cow.id">
+            {{ cow.tag_number }} ({{ cow.farm_name || 'No Farm' }})
+          </option>
+        </select>
+        <button *ngIf="selectedCowId" (click)="clearSearch()" class="btn-clear">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Compiling farm metrics...</div>
+
+  <div *ngIf="!isLoading">
+    
+    <div *ngIf="isLoadingProfile" class="loading-profile">Loading cow records...</div>
+    
+    <div *ngIf="cowProfile" class="cow-profile-container">
+      <div class="profile-header">
+        <div class="profile-title-row">
+          <h3>Records for Cow: {{ cowProfile.cow?.tag_number }}</h3>
+          <button class="btn-close" (click)="clearSearch()">×</button>
+        </div>
+        <div class="profile-summary">
+          <span><strong>Breed:</strong> {{ cowProfile.cow?.breed }}</span>
+          <span><strong>Sex:</strong> {{ cowProfile.cow?.sex | titlecase }}</span>
+          <span><strong>Status:</strong> {{ cowProfile.cow?.status }}</span>
+          <span><strong>Location:</strong> {{ cowProfile.cow?.farm_name || 'No Farm Assigned' }}</span>
+        </div>
+      </div>
+
+      <div class="profile-records-grid">
+        <div class="profile-card">
+          <h4>Health History</h4>
+          <div class="records-list">
+            <div *ngFor="let record of cowProfile.health_records" class="record-item">
+              <div class="record-date">{{ record.visit_date | date:'mediumDate' }}</div>
+              <div class="record-details">
+                <strong>{{ record.diagnosis }}</strong>
+                <p>{{ record.treatment }}</p>
+              </div>
+            </div>
+            <div *ngIf="!cowProfile.health_records?.length" class="empty-msg">No health records found.</div>
+          </div>
+        </div>
+
+        <div class="profile-card">
+          <h4>Breeding History</h4>
+          <div class="records-list">
+            <div *ngFor="let record of cowProfile.breeding_records" class="record-item">
+              <div class="record-date">{{ record.service_date | date:'mediumDate' }}</div>
+              <div class="record-details">
+                <strong [class.pending]="!record.outcome">
+                  {{ record.outcome ? (record.outcome.replace('_', ' ') | titlecase) : 'Pending Outcome' }}
+                </strong>
+                <p>Method: {{ record.breeding_method }}</p>
+              </div>
+            </div>
+            <div *ngIf="!cowProfile.breeding_records?.length" class="empty-msg">No breeding records found.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-actions" style="padding: 1rem 1.5rem; background: #f8f9fa; border-top: 1px solid #dee2e6; text-align: right; display: flex; justify-content: flex-end; gap: 1rem;">
+        <button class="btn-action" (click)="downloadReport()" style="background-color: #40c057;">
+          📄 Download PDF Report
+        </button>
+      </div>
+    </div>
+
+    <div [hidden]="cowProfile">
+      
+      <div class="metrics-grid">
+        <div class="metric-card total">
+          <div class="card-icon">🐄</div>
+          <div class="card-info">
+            <h3>Total Cattle</h3>
+            <p class="big-number">{{ totalCattle }}</p>
+          </div>
+        </div>
+
+        <div class="metric-card male">
+          <div class="card-icon">♂️</div>
+          <div class="card-info">
+            <h3>Male</h3>
+            <p class="big-number">{{ totalMale }}</p>
+          </div>
+        </div>
+
+        <div class="metric-card female">
+          <div class="card-icon">♀️</div>
+          <div class="card-info">
+            <h3>Female</h3>
+            <p class="big-number">{{ totalFemale }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Herd Analytics Visualization Section -->
+      <div class="analytics-grid" style="margin-bottom: 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+        
+        <div class="recent-card chart-card">
+          <h3>Herd Health Status</h3>
+          <div class="chart-container" style="padding: 1rem 0;">
+            <div class="status-chart">
+              <div *ngFor="let status of statusStats" class="status-bar-wrapper">
+                <div class="status-label">
+                  <span>{{ status.name }}</span>
+                  <span>{{ status.count }} ({{ status.percentage }}%)</span>
+                </div>
+                <div class="progress-bg" style="height: 12px; background: #e9ecef; border-radius: 6px; overflow: hidden; margin-top: 0.5rem;">
+                  <div class="progress-fill" [style.width.%]="status.percentage" [style.background-color]="status.color" style="height: 100%; transition: width 1s ease-in-out;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-card chart-card">
+          <h3>Top Breeds Distribution</h3>
+          <div class="chart-container" style="padding: 1rem 0;">
+            <div class="breed-chart">
+              <div *ngFor="let breed of breedStats" class="breed-row" style="margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.25rem;">
+                  <span style="font-weight: 500;">{{ breed.name }}</span>
+                  <span style="color: #6c757d;">{{ breed.count }} heads</span>
+                </div>
+                <div style="height: 8px; background: #f1f3f5; border-radius: 4px; overflow: hidden;">
+                  <div [style.width.%]="breed.percentage" style="height: 100%; background: #228be6; border-radius: 4px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="recent-grid">
+        
+        <div class="recent-card">
+          <h3>Recently Added Cattle</h3>
+          <div class="list-container">
+            <div class="list-item" *ngFor="let cow of recentCows">
+              <div class="cow-thumb" [style.backgroundImage]="'url(' + (cow.image_url || 'assets/no-cow.png') + ')'"></div>
+              <div class="item-details">
+                <strong>{{ cow.tag_number }}</strong>
+                <span>{{ cow.breed }} • {{ cow.sex | titlecase }}</span>
+              </div>
+              <a [routerLink]="['/view-cattle', cow.cow_id || cow.id]" class="view-link">View</a>
+            </div>
+            <div *ngIf="recentCows.length === 0" class="empty-state">No cattle found.</div>
+          </div>
+        </div>
+
+        <div class="recent-card">
+          <h3>Recent Health Records</h3>
+          <div class="list-container">
+            <div class="list-item" *ngFor="let record of recentHealth">
+              <div class="icon-circle health">🏥</div>
+              <div class="item-details">
+                <strong>{{ record.tag_number || record.cow_id }}</strong>
+                <span>{{ record.reason || record.diagnosis }}</span>
+                <small>{{ record.visit_date | date:'shortDate' }}</small>
+              </div>
+              <a routerLink="/health-records" class="view-link">View List</a>
+            </div>
+            <div *ngIf="recentHealth.length === 0" class="empty-state">No health records found.</div>
+          </div>
+        </div>
+
+        <div class="recent-card">
+          <h3>Recent Breeding</h3>
+          <div class="list-container">
+            <div class="list-item" *ngFor="let record of recentBreeding">
+              <div class="icon-circle breeding">🧬</div>
+              <div class="item-details">
+                <strong>{{ record.tag_number || record.cow_id }}</strong>
+                <span [class.pending]="!record.outcome">{{ record.outcome ? (record.outcome.replace('_', ' ') | titlecase) : 'Pending Outcome' }}</span>
+                <small>{{ record.service_date | date:'shortDate' }}</small>
+              </div>
+              <a routerLink="/breeding-records" class="view-link">View List</a>
+            </div>
+            <div *ngIf="recentBreeding.length === 0" class="empty-state">No breeding records found.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

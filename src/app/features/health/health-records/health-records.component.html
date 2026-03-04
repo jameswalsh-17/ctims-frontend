@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Health & Medical Records</h2>
+    <button *ngIf="canEdit" class="add-btn" routerLink="/add-health-record">+ Add Health Record</button>
+  </div>
+
+  <div class="filter-bar" *ngIf="!isLoading">
+    <div class="filter-group">
+      <label for="searchTag">Cow Tag:</label>
+      <input type="text" id="searchTag" [(ngModel)]="filterTag" (input)="applyFilters()" placeholder="Search tag...">
+    </div>
+
+    <div class="filter-group">
+      <label for="filterDiagnosis">Diagnosis/Reason:</label>
+      <input type="text" id="filterDiagnosis" [(ngModel)]="filterDiagnosis" (input)="applyFilters()" placeholder="Search diagnosis...">
+    </div>
+
+    <div class="filter-group">
+      <label for="filterVet">Veterinarian:</label>
+      <select id="filterVet" [(ngModel)]="filterVet" (change)="applyFilters()">
+        <option value="">All Vets</option>
+        <option *ngFor="let vet of vets" [value]="vet">{{ vet }}</option>
+      </select>
+    </div>
+
+    <button class="btn-clear" (click)="clearFilters()">Reset</button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Loading health records...</div>
+
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div class="table-wrapper" *ngIf="!isLoading && !errorMessage">
+    <table class="health-table">
+      <thead>
+        <tr>
+          <th>Date of Visit</th>
+          <th>Cow Tag</th>
+          <th>Reason / Diagnosis</th>
+          <th>Treatment</th>
+          <th>Vet Name</th>
+          <th>Follow-up</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of filteredRecords">
+          <td>{{ record.last_visit | date:'mediumDate' }}</td>
+          <td><strong>{{ record.tag_number }}</strong></td>
+          <td>
+            <div>{{ record.reason || 'N/A' }}</div>
+            <div *ngIf="record.diagnosis" style="font-size: 0.85em; color: #666;">{{ record.diagnosis }}</div>
+          </td>
+          <td>{{ record.treatment || 'None' }}</td>
+          <td>{{ record.vet_username }}</td>
+          <td>
+            <span class="status-badge active" *ngIf="record.follow_up_date">{{ record.follow_up_date | date:'mediumDate' }}</span>
+            <span style="color: #999;" *ngIf="!record.follow_up_date">None</span>
+          </td>
+          <td>
+            <button class="action-btn view" [routerLink]="['/view-health-record', record.health_id]">View</button>
+            <button *ngIf="canEdit" class="action-btn edit" [routerLink]="['/edit-health-record', record.health_id]">Edit</button>
+            <button *ngIf="canEdit" class="action-btn delete" (click)="deleteRecord(record.health_id)">Delete</button>
+          </td>
+        </tr>
+        
+        <tr *ngIf="filteredRecords.length === 0">
+          <td colspan="7" class="no-data">No health records matches your filters.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

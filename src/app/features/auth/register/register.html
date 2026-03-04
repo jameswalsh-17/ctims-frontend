@@ -1,0 +1,50 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1 style="color: #228be6; margin: 0; font-size: 2rem;">🚜 CTIMS</h1>
+      <p style="color: #6c757d; margin-top: 0.5rem;">Request Access to the Platform</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert error" style="background: #f8d7da; color: #842029; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; border: 1px solid #f5c2c7; font-size: 0.9rem;">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="username" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #495057;">Desired Username</label>
+        <input type="text" id="username" formControlName="username" placeholder="Enter your username" style="width: 100%; padding: 0.75rem; border: 1px solid #dee2e6; border-radius: 8px; font-size: 1rem;">
+        <small *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" style="color: #dc3545;">Username is required.</small>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #495057;">Email Address</label>
+        <input type="email" id="email" formControlName="email" placeholder="Enter your email" style="width: 100%; padding: 0.75rem; border: 1px solid #dee2e6; border-radius: 8px; font-size: 1rem;">
+        <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" style="color: #dc3545;">Please enter a valid email.</small>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.25rem;">
+        <label for="role" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #495057;">Requested Role</label>
+        <select id="role" formControlName="role" style="width: 100%; padding: 0.75rem; border: 1px solid #dee2e6; border-radius: 8px; font-size: 1rem;">
+          <option value="" disabled selected>-- Select your role --</option>
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+        <small *ngIf="registerForm.get('role')?.invalid && registerForm.get('role')?.touched" style="color: #dc3545;">Role is required.</small>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label for="password" style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #495057;">Password</label>
+        <input type="password" id="password" formControlName="password" placeholder="Create a password" style="width: 100%; padding: 0.75rem; border: 1px solid #dee2e6; border-radius: 8px; font-size: 1rem;">
+        <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" style="color: #dc3545;">Password must be at least 8 characters.</small>
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid || isSubmitting" class="btn-login" style="width: 100%; padding: 0.85rem; background-color: #228be6; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+        {{ isSubmitting ? 'Submitting...' : 'Request Access' }}
+      </button>
+
+      <div class="login-footer" style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+        <p style="color: #6c757d;">Already have an account? <a routerLink="/login" style="color: #228be6; text-decoration: none; font-weight: 600;">Log In</a></p>
+      </div>
+    </form>
+  </div>
+</div>

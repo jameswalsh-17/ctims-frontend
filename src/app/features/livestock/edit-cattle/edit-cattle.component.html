@@ -1,0 +1,85 @@
+<div class="page-container">
+  <div class="form-card">
+    <h2>Edit Cattle Record</h2>
+    <p>Update the details for this animal below.</p>
+
+    <div *ngIf="isLoading" class="alert info">Loading record details...</div>
+
+    <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+    <form *ngIf="!isLoading" [formGroup]="cowForm" (ngSubmit)="onSubmit()">
+      
+      <div class="form-group">
+        <label for="tag_number">Tag Number (UK/XI + 13 Digits) *</label>
+        <input type="text" id="tag_number" formControlName="tag_number" placeholder="e.g. XI7464745637465">
+        <div *ngIf="cowForm.get('tag_number')?.errors?.['invalidTagFormat'] && cowForm.get('tag_number')?.touched" class="field-error" style="color: #dc3545; font-size: 0.8rem; margin-top: 0.25rem;">
+          Format: UK/XI followed by 13 digits (No spaces needed).
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="breed">Breed *</label>
+        <select id="breed" formControlName="breed">
+          <option *ngFor="let breed of allowedBreeds" [value]="breed">{{ breed }}</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="sex">Sex *</label>
+          <select id="sex" formControlName="sex">
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+          </select>
+        </div>
+
+        <div class="form-group half">
+          <label for="date_of_birth">Date of Birth *</label>
+          <input type="date" id="date_of_birth" formControlName="date_of_birth">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status *</label>
+        <select id="status" formControlName="status">
+          <option value="active">Active</option>
+          <option value="sold">Sold</option>
+          <option value="deceased">Deceased</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="farm_name">Farm Location *</label>
+        <select id="farm_name" formControlName="farm_name">
+          <option *ngFor="let loc of locations" [value]="loc.farm_name">
+            {{ loc.farm_name }}
+          </option>
+        </select>
+      </div>
+
+      <hr style="margin: 2rem 0; border: none; border-top: 1px solid #eee;">
+      
+      <div class="form-group">
+        <label>Current Photo</label>
+        
+        <div *ngIf="currentImageUrl" style="margin-bottom: 1rem;">
+          <img [src]="currentImageUrl" alt="Current Cow Photo" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
+        </div>
+        
+        <div *ngIf="!currentImageUrl" style="margin-bottom: 1rem; color: #666; font-style: italic;">
+          No photo currently uploaded for this animal.
+        </div>
+        
+        <label for="cow_image">Upload New Photo (Optional)</label>
+        <input type="file" id="cow_image" (change)="onFileSelected($event)" accept="image/png, image/jpeg, image/webp">
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn-cancel" (click)="cancel()" style="padding: 0.75rem 1.5rem; border-radius: 4px; border: 1px solid #777; background: transparent; color: inherit; cursor: pointer;">Cancel</button>
+        <button type="submit" class="btn-submit" [disabled]="cowForm.invalid || isSubmitting">
+          {{ isSubmitting ? 'Updating...' : 'Update Cattle' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

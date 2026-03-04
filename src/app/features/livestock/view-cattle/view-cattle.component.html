@@ -1,0 +1,76 @@
+<div class="page-container">
+  
+  <div class="header-actions">
+    <button class="btn-back" (click)="goBack()">← Back to Herd</button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Loading animal profile...</div>
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div class="profile-card" *ngIf="!isLoading && cow">
+    
+    <div class="profile-header">
+      <div class="tag-title">
+        <h2>Tag: {{ cow.tag_number }}</h2>
+        <span class="status-badge" [ngClass]="cow.status">{{ cow.status | titlecase }}</span>
+      </div>
+      <button *ngIf="canEdit && cow" class="btn-edit" [routerLink]="['/edit-cattle', cow.cow_id]">Edit Record</button>
+    </div>
+
+    <div class="profile-body" style="display: block; width: 100%;">
+      
+      <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 2rem;">
+        
+        <div class="image-section" style="width: 300px; height: 300px; border-radius: 8px; overflow: hidden; border: 2px solid #ccc; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center;">
+          
+          <img *ngIf="cow.image_url" 
+               [src]="cow.image_url" 
+               alt="Photo of {{ cow.tag_number }}" 
+               class="cow-photo"
+               style="width: 300px !important; height: 300px !important; object-fit: cover;">
+          
+          <div *ngIf="!cow.image_url" class="no-photo" style="color: #999; font-weight: bold;">
+            <span>📷 No Photo Available</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="details-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+        <div class="detail-item">
+          <label>Breed</label>
+          <p>{{ cow.breed }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Sex</label>
+          <p>{{ cow.sex | titlecase }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Date of Birth</label>
+          <p>{{ cow.date_of_birth | date:'longDate' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Location / Farm Name</label>
+          <p>{{ cow.farm_name || 'Not Assigned' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Record Created On</label>
+          <p>{{ cow.created_at | date:'medium' }}</p>
+        </div>
+
+        <div class="detail-item">
+          <label>Last Updated</label>
+          <p>{{ cow.updated_at | date:'medium' }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+    
+  
+</div>

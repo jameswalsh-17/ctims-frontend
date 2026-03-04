@@ -1,0 +1,80 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>My Cattle</h2>
+    <button *ngIf="canEdit" class="add-btn" routerLink="/add-cattle">+ Add New Cattle</button>
+  </div>
+
+  <div class="filter-bar" *ngIf="!isLoading">
+    <div class="filter-group">
+      <label for="searchTag">Tag Number:</label>
+      <input type="text" id="searchTag" [(ngModel)]="filterTag" (input)="applyFilters()" placeholder="Search tag...">
+    </div>
+
+    <div class="filter-group">
+      <label for="filterBreed">Breed:</label>
+      <select id="filterBreed" [(ngModel)]="filterBreed" (change)="applyFilters()">
+        <option value="">All Breeds</option>
+        <option *ngFor="let breed of breeds" [value]="breed">{{ breed }}</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="filterSex">Sex:</label>
+      <select id="filterSex" [(ngModel)]="filterSex" (change)="applyFilters()">
+        <option value="">All</option>
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label for="filterStatus">Status:</label>
+      <select id="filterStatus" [(ngModel)]="filterStatus" (change)="applyFilters()">
+        <option value="">All</option>
+        <option value="active">Active</option>
+        <option value="sold">Sold</option>
+        <option value="deceased">Deceased</option>
+      </select>
+    </div>
+
+    <button class="btn-clear" (click)="clearFilters()">Reset</button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Loading herd data...</div>
+
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div class="table-wrapper" *ngIf="!isLoading && !errorMessage">
+    <table class="cattle-table">
+      <thead>
+        <tr>
+          <th>Tag Number</th>
+          <th>Breed</th>
+          <th>Sex</th>
+          <th>Date of Birth</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cow of filteredCows">
+          <td><strong>{{ cow.tag_number }}</strong></td>
+          <td>{{ cow.breed }}</td>
+          <td>{{ cow.sex }}</td>
+          <td>{{ cow.date_of_birth | date:'mediumDate' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="cow.status.toLowerCase()">{{ cow.status | titlecase }}</span>
+          </td>
+          <td>
+            <button class="action-btn view" [routerLink]="['/view-cattle', cow.cow_id]">View</button>
+            <button *ngIf="canEdit" class="action-btn edit" [routerLink]="['/edit-cattle', cow.cow_id]">Edit</button>
+            <button *ngIf="canEdit" class="action-btn delete" (click)="deleteCow(cow.cow_id)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredCows.length === 0">
+          <td colspan="6" class="no-data">No cattle matches your filters.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

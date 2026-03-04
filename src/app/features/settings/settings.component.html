@@ -1,0 +1,89 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Account Settings</h2>
+    <p style="color: #6c757d;">Manage your personal profile and farm details.</p>
+  </div>
+
+  <div *ngIf="successMessage" class="alert success" style="background: #d1e7dd; color: #0f5132; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; border: 1px solid #badbcc;">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert error" style="background: #f8d7da; color: #842029; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; border: 1px solid #f5c2c7;">{{ errorMessage }}</div>
+
+  <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+    
+    <div class="settings-card" style="flex: 1; min-width: 300px; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <h3 style="margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">My Profile</h3>
+      
+      <div *ngIf="isLoading">Loading profile...</div>
+
+      <form *ngIf="!isLoading" [formGroup]="profileForm" (ngSubmit)="onSubmitProfile()">
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="username" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Username</label>
+          <input type="text" id="username" formControlName="username" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="email" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Personal Email</label>
+          <input type="email" id="email" formControlName="email" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="password" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">New Password</label>
+          <input type="password" id="password" formControlName="password" placeholder="Leave blank to keep current password" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+
+        <button type="submit" [disabled]="profileForm.invalid || isSubmitting" style="background: #0d6efd; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; font-weight: bold; cursor: pointer;">
+          {{ isSubmitting ? 'Saving...' : 'Update Profile' }}
+        </button>
+      </form>
+    </div>
+
+    <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 2rem;">
+      
+      <div class="settings-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3 style="margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">Main Farm Details</h3>
+        
+        <div *ngIf="mainFarm" style="margin-top: 1.5rem; padding: 1.5rem; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #0d6efd;">
+          <h4 style="margin: 0 0 0.5rem 0; color: #212529; font-size: 1.25rem;">{{ mainFarm.farm_name }}</h4>
+          
+          <p style="margin: 0 0 1rem 0; color: #495057; font-size: 0.95rem; line-height: 1.5;">
+            <span style="display: block; font-weight: bold; color: #6c757d; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.2rem;">Registered Address</span>
+            {{ mainFarm.address_line }}<br>
+            {{ mainFarm.town }}, {{ mainFarm.county }}<br>
+            {{ mainFarm.postcode }}
+          </p>
+
+          <div style="border-top: 1px solid #dee2e6; padding-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+            <p style="margin: 0; color: #495057; font-size: 0.95rem;">
+              <strong style="color: #6c757d;">📞 Phone:</strong> {{ officePhone }}
+            </p>
+            <p style="margin: 0; color: #495057; font-size: 0.95rem;">
+              <strong style="color: #6c757d;">✉️ Email:</strong> {{ officeEmail }}
+            </p>
+          </div>
+          
+          <small style="display: block; margin-top: 1.5rem; color: #adb5bd; font-size: 0.8rem;">
+            <em>* Address managed in Farm Locations</em>
+          </small>
+        </div>
+
+        <div *ngIf="!mainFarm && !isLoading" style="margin-top: 1.5rem; color: #dc3545;">
+          No farm locations found. Add one in the Locations tab!
+        </div>
+      </div>
+
+      <div class="settings-card" style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h3 style="margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">App Preferences</h3>
+        
+        <div style="margin-top: 1.5rem;">
+          <label style="display: flex; align-items: center; cursor: pointer; font-weight: bold;">
+            <span style="margin-right: 1rem;">Dark Mode</span>
+            <div class="toggle-switch" (click)="toggleDarkMode()" [class.active]="isDarkMode">
+              <div class="slider"></div>
+            </div>
+          </label>
+          <p style="color: #6c757d; font-size: 0.85rem; margin-top: 0.5rem;">Switch between light and dark themes.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

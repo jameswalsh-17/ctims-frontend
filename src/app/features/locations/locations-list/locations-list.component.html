@@ -1,0 +1,45 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Farm Locations</h2>
+    <button *ngIf="canEdit" class="add-btn" routerLink="/add-location">+ Add Location</button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Loading locations...</div>
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div class="table-wrapper" *ngIf="!isLoading && !errorMessage">
+    <table class="location-table">
+      <thead>
+        <tr>
+          <th>Farm Name</th>
+          <th>Town</th>
+          <th>County</th>
+          <th>Postcode</th>
+          <th>Last Inspection</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let loc of locations">
+          <td><strong>{{ loc.farm_name }}</strong></td>
+          <td>{{ loc.town }}</td>
+          <td>{{ loc.county }}</td>
+          <td>{{ loc.postcode }}</td>
+          <td>
+            <span *ngIf="loc.last_inspection_date" class="status-badge">{{ loc.last_inspection_date | date:'mediumDate' }}</span>
+            <span *ngIf="!loc.last_inspection_date" style="color: #999;">Not inspected</span>
+          </td>
+          <td>
+            <button class="action-btn view" [routerLink]="['/view-location', loc.location_id]">View</button>
+            <button *ngIf="canEdit" class="action-btn edit" [routerLink]="['/edit-location', loc.location_id]">Edit</button>
+            <button *ngIf="canEdit" class="action-btn delete" (click)="deleteLocation(loc.location_id)">Delete</button>
+          </td>
+        </tr>
+        
+        <tr *ngIf="locations.length === 0">
+          <td colspan="6" class="no-data">No farm locations found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

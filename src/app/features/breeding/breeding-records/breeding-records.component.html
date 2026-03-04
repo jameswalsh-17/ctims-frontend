@@ -1,0 +1,62 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Breeding Records</h2>
+    <button *ngIf="canEdit" class="add-btn" routerLink="/add-breeding-record">+ Add Breeding Record</button>
+  </div>
+
+  <div class="filter-bar" *ngIf="!isLoading">
+    <div class="filter-group">
+      <label for="searchTag">Cow Tag:</label>
+      <input type="text" id="searchTag" [(ngModel)]="filterTag" (input)="applyFilters()" placeholder="Search tag...">
+    </div>
+
+    <div class="filter-group">
+      <label for="filterOutcome">Outcome:</label>
+      <select id="filterOutcome" [(ngModel)]="filterOutcome" (change)="applyFilters()">
+        <option value="">All Outcomes</option>
+        <option value="Pending">Pending</option>
+        <option value="pregnant">Pregnant</option>
+        <option value="not_pregnant">Not Pregnant</option>
+        <option value="calved">Calved</option>
+        <option value="aborted">Aborted</option>
+      </select>
+    </div>
+
+    <button class="btn-clear" (click)="clearFilters()">Reset</button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert info">Loading breeding records...</div>
+  <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+
+  <div class="table-wrapper" *ngIf="!isLoading && !errorMessage">
+    <table class="breeding-table">
+      <thead>
+        <tr>
+          <th>Cow Tag</th>
+          <th>Service Date</th>
+          <th>Outcome</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of filteredRecords">
+          <td><strong>{{ record.tag_number }}</strong></td>
+          <td>{{ record.service_date | date:'mediumDate' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="(record.outcome || 'pending').toLowerCase()"> 
+              {{ formatOutcome(record.outcome) | titlecase }} 
+            </span>
+          </td>
+          <td>
+            <button *ngIf="canEdit" class="action-btn edit" [routerLink]="['/edit-breeding-record', record.breeding_id]">Edit</button>
+            <button *ngIf="canEdit" class="action-btn delete" (click)="deleteRecord(record.breeding_id)">Delete</button>
+          </td>
+        </tr>
+        
+        <tr *ngIf="filteredRecords.length === 0">
+          <td colspan="4" class="no-data">No breeding records matches your filters.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
